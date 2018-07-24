@@ -140,3 +140,10 @@ body{
   font-weight: bold;
   padding: 5px 10px;
 }
+
+.empty-message{
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 30px;
+}
