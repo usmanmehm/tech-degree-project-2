@@ -32,15 +32,14 @@ $('.page-header').append(search);
 // Setting up element that will hold the message if there are no search results
 const emptyMessage = document.createElement('h1');
 emptyMessage.className = 'empty-message'
-let node = $('.student-list');
+const node = $('.student-list');
 node.append(emptyMessage);
-
-let $studentDetails = $('.student-details h3'); // for use in search event listener
 
 // ------- Event listener for letter inputs in search field ----------- //
 $('.student-search input').on('keyup', function (event) {
   let searchValue = document.querySelector('input');
   searchValue = searchValue.value.toUpperCase();
+  let $studentDetails = $('.student-details h3'); // selecting the student details
   studentsToShow = searchItems($studentDetails, searchValue); //receives an array with the students that match
   newButtonHTML = createButtons(resultsPerPage,studentsToShow.length); //dynamically update buttons
   $('.pagination')[0].innerHTML = newButtonHTML;
@@ -64,6 +63,20 @@ $('.student-search input').on('keyup', function (event) {
     createSearchPage(studentsToShow, resultsPerPage, buttonClicked);
   });
 });
+
+// ------- Event listener to change pages ----------- //
+// waiting for the click event which will change the page. It also makes sure
+// to apply the appropriate id for the current page
+$('.page-button').on('click', function (event) {
+  $('.pagination a').each(function (index, element) {
+    element.id = ''; //setting all IDs to be blank before applying
+                     //the 'button-pressed' id to the current page button
+  });
+  this.id = 'button-pressed';
+  let buttonClicked = this.innerHTML;
+  createPage(buttonClicked, resultsPerPage);
+});
+
 
 // ------- Search function - returns an array with the index values of the search results ----------- //
 // it also hides the students whose names don't match what the user searches
@@ -92,19 +105,6 @@ function createButtons(resultsPerPage, listLength) {
   }
   return buttonHTML;
 }
-
-// ------- Event listener to change pages ----------- //
-// waiting for the click event which will change the page. It also makes sure
-// to apply the appropriate id for the current page
-$('.page-button').on('click', function (event) {
-  $('.pagination a').each(function (index, element) {
-    element.id = ''; //setting all IDs to be blank before applying
-                     //the 'button-pressed' id to the current page button
-  });
-  this.id = 'button-pressed';
-  let buttonClicked = this.innerHTML;
-  createPage(buttonClicked, resultsPerPage);
-});
 
 // ------- Function that dynamically determines what page to display ----------- //
 function createPage(pageNo, resultsPerPage) {
